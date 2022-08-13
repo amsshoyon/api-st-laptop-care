@@ -27,7 +27,6 @@ export class AuthController {
     @Get('/get-user')
     @UseGuards(AuthGuard())
     getUser(@GetUser() user: User): any {
-        const { username } = user;
-        return { username };
+        return this.authService.getUserData(user);
     }
 }

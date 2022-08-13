@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
 @Module({
     imports: [
