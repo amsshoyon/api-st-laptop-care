@@ -7,8 +7,7 @@ import { UserSchema } from 'src/auth/user.model';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
 @Module({
     imports: [
