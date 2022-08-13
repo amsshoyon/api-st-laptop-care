@@ -1,42 +1,27 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Model } from 'mongoose';
-import { User, UserDocument } from './user.model';
-import { InjectModel } from '@nestjs/mongoose';
+import { JwtPayload, UserResponse } from './interface/user.interface';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectModel('user') private readonly userModel: Model<UserDocument>, private jwtService: JwtService) {}
+    constructor(private userRepository: UserRepository, private jwtService: JwtService) {}
 
-    async getUser(query: object): Promise<User> {
-        return this.userModel.findOne(query);
+    async login(authCredentialsDto: AuthCredentialsDto): Promise<UserResponse> {
+        const { username, password } = authCredentialsDto;
+        const user = await this.userRepository.validateUser(username, password);
+        if (!user) throw new UnauthorizedException('Invalid credentials');
+        const payload: JwtPayload = { username };
+        const accessToken = await this.jwtService.sign(payload);
+        const userData = JSON.parse(JSON.stringify(user));
+        delete userData.password;
+        delete userData.salt;
+        const result = { accessToken, user: userData };
+        return { message: 'success', result };
     }
 
-    async validateUser(username: string, password: string): Promise<any> {
-        const user = await this.getUser({ username });
-        if (!user) return null;
-        const passwordValid = await bcrypt.compare(password, user.password);
-        if (!user) {
-            throw new NotAcceptableException('could not find the user');
-        }
-        if (user && passwordValid) {
-            return user;
-        }
-        return null;
-    }
-
-    async login(user: any) {
-        const payload = { username: user.username, sub: user._id };
-        return {
-            access_token: this.jwtService.sign(payload)
-        };
-    }
-
-    async createUser(username: string, password: string): Promise<User> {
-        return this.userModel.create({
-            username,
-            password
-        });
+    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+        await this.userRepository.signUp(authCredentialsDto);
     }
 }

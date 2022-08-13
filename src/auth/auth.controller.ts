@@ -1,24 +1,33 @@
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Body, ValidationPipe, UseInterceptors, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import * as bcrypt from 'bcrypt';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { UserResponse } from './interface/user.interface';
+import { ApiTags } from '@nestjs/swagger';
+import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 import { User } from './user.model';
+import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
+@ApiTags('Authentications')
+@UseInterceptors(ResponseInterceptor)
 export class AuthController {
     constructor(private authService: AuthService) {}
 
-    @UseGuards(AuthGuard('local'))
     @Post('/login')
-    async login(@Request() req) {
-        return this.authService.login(req.user);
+    async login(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<UserResponse> {
+        return this.authService.login(authCredentialsDto);
     }
 
     @Post('/signup')
-    async createUser(@Body('password') password: string, @Body('username') username: string): Promise<User> {
-        const saltOrRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltOrRounds);
-        const result = await this.authService.createUser(username, hashedPassword);
-        return result;
+    async createUser(@Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto): Promise<void> {
+        return this.authService.signUp(authCredentialsDto);
+    }
+
+    @Get('/get-user')
+    @UseGuards(AuthGuard())
+    getUser(@GetUser() user: User): any {
+        const { username } = user;
+        return { username };
     }
 }
