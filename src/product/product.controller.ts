@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
 import { CreateProductDto } from './dto/create-product.dto';
 import { GetProductFilterDto } from './dto/get-product-filter.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './product.model';
 import { ProductService } from './product.service';
 
@@ -23,5 +24,15 @@ export class ProductController {
     @Get()
     getAllProducts(@Query() filterDto: GetProductFilterDto): Promise<{ products: Product[]; total: number }> {
         return this.productService.getAllProducts(filterDto);
+    }
+
+    @Get('/:id')
+    getProductByID(@Param('id') id: string): Promise<Product> {
+        return this.productService.getProductByID(id);
+    }
+
+    @Patch('/:id')
+    updateTaskStatus(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
+        return this.productService.updateProduct(id, updateProductDto);
     }
 }

@@ -2,15 +2,22 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { GetProductFilterDto } from './dto/get-product-filter.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { Product, ProductDocument } from './product.model';
 
 export class ProductRepository {
-    constructor(
-        @InjectModel('product') private readonly productModel: Model<ProductDocument>
-    ) { }
+    constructor(@InjectModel('product') private readonly productModel: Model<ProductDocument>) { }
 
     async createProduct(createProductDto: CreateProductDto): Promise<Product> {
         return await this.productModel.create(createProductDto);
+    }
+
+    async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+        return await this.productModel.findByIdAndUpdate({ _id: id }, updateProductDto, {new: true});
+    }
+
+    async getProductByID(id: string): Promise<Product> {
+        return await this.productModel.findById(id);
     }
 
     async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; total: number }> {
