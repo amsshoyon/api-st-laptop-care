@@ -10,23 +10,16 @@ export class ProductRepository {
     ) { }
 
     async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-        return await this.productModel.create({
-            title: createProductDto.title,
-            price: createProductDto.price,
-            discount: createProductDto.discount,
-            discountType: createProductDto.discountType,
-            image: createProductDto.image,
-            description: createProductDto.description
-        });
+        return await this.productModel.create(createProductDto);
     }
 
-    async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {
-        const { search, page, limit, sortby } = filterDto;
+    async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; total: number }> {
+        const { search, page, limit, sortby, price } = filterDto;
         const [sortName, sortType]: any = sortby.split('_');
         const re = new RegExp(search, 'i');
 
         let options = {};
-        if (filterDto.search) {
+        if (search) {
             options = {
                 $or: [
                     { 'title': { $regex: re } },
@@ -35,11 +28,15 @@ export class ProductRepository {
             }
         }
 
+        if (price) {
+            const [min, max] = price;
+            options['price'] = { $lte: max ? max : min, $gte: max ? min : 0 }
+        }
+
         const query = this.productModel.find(options);
         query.sort({ [sortName]: sortType ? sortType : 'asc' })
         const total = await this.productModel.count(options);
-
         const products = await query.limit(limit).skip((page - 1) * limit).exec();
-        return { products, count: total }
+        return { products, total: total }
     }
 }

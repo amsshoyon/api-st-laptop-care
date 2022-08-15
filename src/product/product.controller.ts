@@ -21,7 +21,7 @@ export class ProductController {
     }
 
     @Get()
-    getAllProducts(@Query() filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {
+    getAllProducts(@Query() filterDto: GetProductFilterDto): Promise<{ products: Product[]; total: number }> {
         return this.productService.getAllProducts(filterDto);
     }
 }
