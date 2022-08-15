@@ -17,8 +17,8 @@ export class Product {
     @Prop({default: 0})
     discount: number;
     
-    @Prop({default: 'percentage'})
-    discountType: 'percentage' | 'amount';
+    @Prop({default: 'percentage', enum: ['percentage', 'amount']})
+    discountType: string;
 
     @Prop({default: ''})
     description: string;
