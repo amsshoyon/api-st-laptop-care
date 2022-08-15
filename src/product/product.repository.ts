@@ -11,7 +11,7 @@ export class ProductRepository {
         return await this.productModel.create(createProductDto);
     }
 
-    async getProducts(filterDto: GetProductFilterDto): Promise<any> {
+    async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {
         const { search } = filterDto;
         const re = new RegExp(search, 'i');
         const query = await this.productModel.find()

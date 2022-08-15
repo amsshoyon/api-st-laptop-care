@@ -12,7 +12,7 @@ export class ProductService {
         return this.productRepository.createProduct(createProductDto);
     }
 
-    async getAllProducts(filterDto: GetProductFilterDto):  Promise<any> {
+    async getAllProducts(filterDto: GetProductFilterDto):  Promise<{ products: Product[]; count: number }> {
         return this.productRepository.getProducts(filterDto);
     }
 }

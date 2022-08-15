@@ -22,7 +22,7 @@ export class ProductController {
     }
 
     @Get()
-    getAllProducts(@Query(ValidationPipe) filterDto: GetProductFilterDto): Promise<any> {
+    getAllProducts(@Query(ValidationPipe) filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {
         return this.productService.getAllProducts(filterDto);
     }
 }
