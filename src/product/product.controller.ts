@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UseGuards, UseInterceptors, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ResponseInterceptor } from 'src/interceptor/ResponseInterceptor';
@@ -16,13 +16,12 @@ export class ProductController {
     constructor(private productService: ProductService) {}
 
     @Post()
-    @UsePipes(ValidationPipe)
     createProject(@Body() createProductDto: CreateProductDto): Promise<Product> {
         return this.productService.createProduct(createProductDto);
     }
 
     @Get()
-    getAllProducts(@Query(ValidationPipe) filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {
+    getAllProducts(@Query() filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {
         return this.productService.getAllProducts(filterDto);
     }
 }

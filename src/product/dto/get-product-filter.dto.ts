@@ -1,19 +1,6 @@
-import { IsOptional, IsNotEmpty } from 'class-validator';
-
 export class GetProductFilterDto {
-    @IsOptional()
-    @IsNotEmpty()
-    search: string;
-    
-    @IsOptional()
-    @IsNotEmpty()
-    sortby: string;
-    
-    @IsOptional()
-    @IsNotEmpty()
-    page: string;
-   
-    @IsOptional()
-    @IsNotEmpty()
-    limit: string;
+    readonly search: string = '';
+    readonly sortby: string = 'title_asc';
+    readonly page: number = 1;
+    readonly limit: number = 10;
 }
