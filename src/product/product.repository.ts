@@ -8,7 +8,14 @@ export class ProductRepository {
     constructor(@InjectModel('product') private readonly productModel: Model<ProductDocument>) { }
 
     async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-        return await this.productModel.create(createProductDto);
+        return await this.productModel.create({
+            title: createProductDto.title,
+            price: createProductDto.price,
+            discount: createProductDto.discount,
+            discountType: createProductDto.discountType,
+            image: createProductDto.image,
+            description: createProductDto.description
+        });
     }
 
     async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; count: number }> {

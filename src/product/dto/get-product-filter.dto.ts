@@ -8,10 +8,6 @@ export class GetProductFilterDto {
     @IsOptional()
     @IsNotEmpty()
     sortby: string;
-
-    @IsOptional()
-    @IsNotEmpty()
-    sortbyoption: string;
     
     @IsOptional()
     @IsNotEmpty()

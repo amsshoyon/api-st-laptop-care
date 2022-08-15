@@ -5,16 +5,22 @@ export type ProductDocument = Product & Document;
 
 @Schema()
 export class Product {
-    @Prop()
+    @Prop({ required: true })
     title: string;
 
-    @Prop()
+    @Prop({ required: true })
     price: number;
 
-    @Prop()
+    @Prop({default: ''})
     image: string;
 
-    @Prop()
+    @Prop({default: 0})
+    discount: number;
+    
+    @Prop({default: 'percentage'})
+    discountType: 'percentage' | 'amount';
+
+    @Prop({default: ''})
     description: string;
 }
 
