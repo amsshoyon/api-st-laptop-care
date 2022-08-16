@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, now } from 'mongoose';
+import { Document, now, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Variant {
-    @Prop({ required: true })
-    productId: number; // relation to product model
+export class Variant extends Document{
+    @Prop({ required: true , type: Types.ObjectId, ref: 'Product',})
+    productId: Types.ObjectId;
 
-    @Prop({ required: true })
+    @Prop({ default: 0 })
     price: number;
 
     @Prop({ default: null })
@@ -14,6 +14,9 @@ export class Variant {
 
     @Prop({ default: '' })
     image: string;
+    
+    @Prop({ default: [] })
+    option: { name: string, value: string }[][];
 
     @Prop({ default: '' })
     sku: string;

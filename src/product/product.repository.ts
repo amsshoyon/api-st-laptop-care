@@ -13,11 +13,11 @@ export class ProductRepository {
     }
 
     async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
-        return await this.productModel.findByIdAndUpdate({ _id: id }, updateProductDto, {new: true});
+        return await this.productModel.findByIdAndUpdate({ _id: id }, updateProductDto, { new: true });
     }
 
     async getProductByID(id: string): Promise<Product> {
-        return await this.productModel.findById(id);
+        return await this.productModel.findById(id).populate('variants').exec();
     }
 
     async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; total: number }> {

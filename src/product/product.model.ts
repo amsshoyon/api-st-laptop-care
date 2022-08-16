@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, now, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Product {
+export class Product extends Document {
     @Prop({ required: true })
     title: string;
 
@@ -56,7 +56,7 @@ export class Product {
 
     category: { type: Types.ObjectId, ref: 'Category' }
     collections: { type: [Types.ObjectId], ref: 'Collection' };
-    variants: { type: [Types.ObjectId], ref: 'Variant' };
+    // variants: { type: [Types.ObjectId], ref: 'Variant' };
 
     // TimeStamps
     @Prop({ default: now() }) createdAt: Date;
@@ -65,3 +65,8 @@ export class Product {
 
 export type ProductDocument = Product & Document;
 export const ProductSchema = SchemaFactory.createForClass(Product);
+ProductSchema.virtual('variants', {
+    ref: 'Variant',
+    localField: '_id',
+    foreignField: 'productId',
+  });
