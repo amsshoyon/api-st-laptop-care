@@ -1,0 +1,20 @@
+Product Model: 
+    title
+    price
+    sale_price
+    media
+    discount
+    discount_type
+    description
+    status
+    tags
+    sku
+    stock
+    sell_when_out_of_stock
+    category => One to One with Category model
+    collections => One to Many with Collection model
+    variants => One to Many with Variant model
+    options => Creating option array will automatically generate variants with default values which will be editable.
+               On delete a option will also delete variant/variants (Reference Shopify)
+
+Variant model

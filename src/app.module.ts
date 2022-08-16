@@ -3,6 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ProductModule } from './product/product.module';
+import { VariantController } from './variant/variant.controller';
+import { VariantModule } from './variant/variant.module';
+import { CollectionModule } from './collection/collection.module';
+import { CategoryModule } from './category/category.module';
 require('dotenv').config();
 
 @Module({
@@ -12,9 +16,11 @@ require('dotenv').config();
         }),
         MongooseModule.forRoot(process.env.MONGO_HOST),
         AuthModule,
-        ProductModule
+        ProductModule,
+        VariantModule,
+        CollectionModule,
+        CategoryModule
     ],
-    controllers: [],
     providers: []
 })
 export class AppModule {}
