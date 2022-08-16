@@ -17,7 +17,7 @@ export class ProductRepository {
     }
 
     async getProductByID(id: string): Promise<Product> {
-        return await this.productModel.findById(id).populate('variants').exec();
+        return await this.productModel.findById(id).populate({path: 'variants'}).exec();
     }
 
     async getProducts(filterDto: GetProductFilterDto): Promise<{ products: Product[]; total: number }> {

@@ -2,8 +2,8 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, now, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Variant extends Document{
-    @Prop({ required: true , type: Types.ObjectId, ref: 'Product',})
+export class Variant {
+    @Prop({ required: true , type: Types.ObjectId, ref: 'product',})
     productId: Types.ObjectId;
 
     @Prop({ default: 0 })

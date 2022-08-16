@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, now, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class Product extends Document {
+export class Product {
     @Prop({ required: true })
     title: string;
 
@@ -66,7 +66,9 @@ export class Product extends Document {
 export type ProductDocument = Product & Document;
 export const ProductSchema = SchemaFactory.createForClass(Product);
 ProductSchema.virtual('variants', {
-    ref: 'Variant',
+    ref: 'variant',
     localField: '_id',
     foreignField: 'productId',
-  });
+});
+ProductSchema.set('toObject', { virtuals: true });
+ProductSchema.set('toJSON', { virtuals: true });
