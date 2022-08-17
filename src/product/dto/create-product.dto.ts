@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
 enum DiscountType { 'percentage', 'amount' }
 
@@ -24,6 +25,11 @@ export class CreateProductDto {
     @ApiProperty() @IsOptional() vendor: string;
     @ApiProperty() @IsOptional() physical_product: boolean;
     @ApiProperty() @IsOptional() suffix: string;
-    @ApiProperty() @IsOptional() category: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @Transform(({ value }) => value ? value : null)
+    categoryId: string | null;
+
     @ApiProperty() @IsOptional() collections: string[];
 }

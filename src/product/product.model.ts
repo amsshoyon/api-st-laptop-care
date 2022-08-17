@@ -54,9 +54,8 @@ export class Product {
     @Prop({ default: '' })
     suffix: string; // promotional text i.e. Special
 
-    category: { type: Types.ObjectId, ref: 'Category' }
-    collections: { type: [Types.ObjectId], ref: 'Collection' };
-    // variants: { type: [Types.ObjectId], ref: 'Variant' };
+    @Prop()
+    category_id: Types.ObjectId;
 
     // TimeStamps
     @Prop({ default: now() }) createdAt: Date;
@@ -65,10 +64,7 @@ export class Product {
 
 export type ProductDocument = Product & Document;
 export const ProductSchema = SchemaFactory.createForClass(Product);
-ProductSchema.virtual('variants', {
-    ref: 'variant',
-    localField: '_id',
-    foreignField: 'productId',
-});
+ProductSchema.virtual('variants', { ref: 'variant', localField: '_id', foreignField: 'productId' });
+ProductSchema.virtual('category', { ref: 'category', localField: 'category_id', foreignField: '_id' });
 ProductSchema.set('toObject', { virtuals: true });
 ProductSchema.set('toJSON', { virtuals: true });

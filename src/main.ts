@@ -3,6 +3,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { urlencoded, json } from 'express';
+import { MongoExceptionFilter } from './mongoErrorHandler';
 
 async function bootstrap() {
     const logger = new Logger('bootstrap');
@@ -24,6 +25,7 @@ async function bootstrap() {
     const port = process.env.PORT || 8000;
     const app = await NestFactory.create(AppModule);
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useGlobalFilters(new MongoExceptionFilter());
     app.enableCors();
     app.use(json({ limit: '50mb' }));
     app.use(urlencoded({ extended: true, limit: '50mb' }));

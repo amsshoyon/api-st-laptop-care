@@ -32,7 +32,7 @@ export class ProductController {
     }
 
     @Patch('/:id')
-    updateTaskStatus(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
+    updateProduct(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto): Promise<Product> {
         return this.productService.updateProduct(id, updateProductDto);
     }
 }

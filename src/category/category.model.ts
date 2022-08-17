@@ -1,12 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, now, Types } from 'mongoose';
+import { Document, now } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Category {
-    @Prop({ required: true })
-    name: number;
-
-    product: { type: [Types.ObjectId], ref: 'Product' }
+    @Prop({ required: true, unique: true })
+    title: string;
 
     // TimeStamps
     @Prop({ default: now() }) createdAt: Date;

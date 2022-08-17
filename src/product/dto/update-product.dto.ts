@@ -24,6 +24,6 @@ export class UpdateProductDto {
     @ApiProperty() @IsOptional() vendor: string;
     @ApiProperty() @IsOptional() physical_product: boolean;
     @ApiProperty() @IsOptional() suffix: string;
-    @ApiProperty() @IsOptional() category: string;
+    @ApiProperty() @IsOptional() categoryId: string;
     @ApiProperty() @IsOptional() collections: string[];
 }
